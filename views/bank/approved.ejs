@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>approved</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+    <style>
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            /* border-collapse: collapse; */
+        }
+
+        th {
+            background-color: #7096D1;
+        }
+        td{
+            background-color: #99b0d33b;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('banknav')%>
+    <section class="py-4">
+        <div class="approved-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <th class="text-center">Full Name</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                                <% approveduser.forEach(i=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= i.firstname %> <%= i.lastname %>
+                                        </td>
+                                        <td>
+                                            <%= i.approved? 'Approved' : 'Pending' %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
