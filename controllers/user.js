@@ -1,8 +1,12 @@
 
 const User = require('../model/User')
+const QRcode = require('qrcode')
+const dayjs = require('dayjs')
 const Upi = require('../model/Upi')
 const Transaction = require('../model/Transaction')
 const Bank = require('../model/Bank')
+
+
 
 const cloudinary = require('cloudinary').v2
 
@@ -36,8 +40,7 @@ exports.signup = async (req, res) => {
 
 exports.application = async (req, res) => {
     const username = req.user.username
-    console.log(username)
-
+    // console.log(username)
     const user = await User.findOne({ username });
 
     if (!user) {
@@ -55,7 +58,6 @@ exports.application = async (req, res) => {
 exports.fillapplication = async (req, res) => {
     try {
         const username = req.user.username;
-        // console.log("Username:", username);
 
         const file = req.files?.photo;
         if (!file) {
@@ -81,13 +83,14 @@ exports.fillapplication = async (req, res) => {
         user.address = req.body.address;
         user.pincode = req.body.pincode;
         user.bloodgroup = req.body.bloodgroup;
+        user.pin = req.body.pin
         user.formsubmit = true;
         await user.save();
 
         res.redirect('/pending');
     } catch (err) {
         console.error("Error:", err);
-        res.status(500).send("Something went wrong");
+        res.send(" wrong");
     }
 };
 
@@ -99,61 +102,143 @@ exports.pending = (req, res) => {
 exports.home = async (req, res) => {
     const username = req.user.username
     let userdetails = await User.findOne({ username: username })
-    // console.log(userdetails)
     if (userdetails.formsubmit && !userdetails.approved) {
         return res.redirect('/pending')
     }
     if (!userdetails.formsubmit) {
         return res.redirect('/application')
     }
-    return res.render('user/home', { userdetails })
+    QRcode.toDataURL(`http://localhost:3100/sendmoney/${userdetails.id}`, function (err, image) {
+        if (err) {
+            return res.send('error')
+        }
+        var a  = image
+        return res.render('user/home', { userdetails,a })
+    })
+   
 }
 exports.getupi = async (req, res) => {
     let username = req.user.username
     const user = await User.findOne({ username: username })
-    return res.render('user/upi',{user})
+    return res.render('user/upi', { user})
 }
 
 exports.createupi = async (req, res) => {
-    let upi = req.body.upi
-    let bank = req.body.bank
-    console.log(bank, upi)
-    let username = req.user.username
-    const user = await User.findOne({ username: username })
-    const finder = await Upi.findOne({ upi: upi })
-    if (finder) {
-        return res.send('already exists ')
+    try {
+        let upi = req.body.upi
+        let bank = req.body.bank
+        // console.log(bank, upi)
+        let username = req.user.username
+        const user = await User.findOne({ username: username })
+        if (user.upi) {
+            return res.send("User already has a UPI")
+        }
+        const finder = await Upi.findOne({ upi: upi + bank })
+        if (finder) {
+            return res.send("UPI already exists")
+        }
+        const newupi = `${upi}@${bank}`
+        await Upi.create({
+            id: Date.now(),
+            upi: newupi,
+            accountnumber: user.accountnumber
+        })
+        user.upi = newupi
+        await user.save()
+
+        return res.redirect('/')
+    } catch (e) {
+        console.log(e)
+        return res.send('error')
     }
-    await Upi.create({
-        id: Date.now(),
-        upi: upi + bank,
-        accountnumber: user.accountnumber
-    })
-    user.upi = upi + Bank
-    await user.save()
-    
-    return res.redirect('/')
 }
+
 
 
 exports.sendmoney = async (req, res) => {
     const username = req.user.username
     let userdetails = await User.findOne({ username: username })
     // console.log(userdetails)
-    return res.render('user/sendmoney', { userdetails })
+    let id = req.params.id
+    // console.log(id,'id')
+    const reciever = await User.findOne({ id: id });
+    // console.log(reciever)
+    let transactions = [];
+    if (reciever) {
+        transactions = await Transaction.find({
+            $or: [
+                { senderUpi: userdetails.upi, recieverUpi: reciever.upi },
+                { senderUpi: reciever.upi, recieverUpi: userdetails.upi }
+            ]
+        });
+    }
+    return res.render('user/sendmoney', { userdetails, id, transactions,reciever })
 }
 
 exports.postSendMoney = async (req, res) => {
-    const { upi, amount } = req.body
-    const reciever = await User.findOne({ upi: upi })
-    console.log(reciever)
+    try {
+        const { amount } = req.body
+        const reciverparams = req.params.id
+        // console.log(reciverparams, 'here is the param id')
+        const reciever = await User.findOne({ id: reciverparams })
+        // console.log(reciever,'here is the reciever')
+        // console.log(reciever.upi, 'here is the upi')
+        if (!reciever.upi) {
+            return res.send('this account dont have a upi')
+        }
+        if (!reciever) {
+            return res.send('incorrect')
+        }
+        let username = req.user.username
+        const sender = await User.findOne({ username: username })
+        // console.log(sender, 'here is the sender')
+        if (parseInt(sender.balance) < parseInt(amount)) {
+            return res.redirect('/insufficient')
+        }
+        sender.balance = parseInt(sender.balance) - parseInt(amount)
+        await sender.save()
+        reciever.balance = parseInt(reciever.balance) + parseInt(amount)
+        console.log(reciever.balance)
+        await reciever.save()
+        await Transaction.create({
+            id: Date.now(),
+            senderAccount: sender.accountnumber,
+            senderUpi: sender.upi,
+            recieverAccount: reciever.accountnumber,
+            recieverUpi: reciever.upi,
+            amount: amount,
+            day: dayjs().format(' HH:mm:ss')
+        })
+        let userdetails = await User.findOne({ username: username })
 
-    return res.send("Transaction successful");
+        let transactions = await Transaction.find({
+            $or: [
+                { senderUpi: sender.upi, recieverUpi: reciever.upi },
+                { senderUpi: reciever.upi, recieverUpi: sender.upi }
+            ]
+        })
+        // console.log(transactions, 'here is the transctions')
+        return res.render("user/sendmoney",{userdetails,id:reciverparams,transactions})
+    } catch (e) {
+        console.log(e)
+        return res.send('error')
+   }
 };
 
-
-
-
+exports.getpeoples = async (req, res) => {
+    try {
+        const currentUsername = req.user.username;
+        const users = await User.find({ username: { $ne: currentUsername }})
+        // console.log(users)
+        res.render('user/people', { users, currentUsername });
+    } catch (err) {
+        console.error(err);
+        res.send('Error');
+    }
+};
+exports.getinsufficient = (req,res) => {
+    return res.render('user/insufficient')
+}
 
 exports.logout = (req, res) => {
     return res.clearCookie('cookie').redirect('/login')

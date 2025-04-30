@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { getbank, getbankdetails, getselectaccount, approval, getapproved } = require('../controllers/bank')
+const { getbank, getbankdetails, getselectaccount, approval, getapproved, getdeposite, depositemoney, getwidrow, widrowmoney, decline, showAllDeclinedAccounts } = require('../controllers/bank')
 
 const { validatethisUser } = require('../middleware/check')
 
@@ -20,6 +20,15 @@ router
 router
     .route('/approved')
     .get(getapproved)
+
+router
+    .route('/deposite')
+    .get(getdeposite)
+    .post(depositemoney)
+router
+    .route('/widrow')
+    .get(getwidrow)
+    .post(widrowmoney)
 
 
     

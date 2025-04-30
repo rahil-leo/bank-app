@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insufficient Balance</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .main-page {
+            background-color: rgba(211, 203, 203, 0.759);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="main-page">
+            <div>
+                <h1>Insufficient Balance</h1>
+                <p>redirect <span id="timer">3</span></p>
+            </div>
+        </div>
+    </section>
+    <script>
+        setTimeout(() => {
+            window.location.href = location.origin;
+        }, 3000);
+
+        let timeLeft = 3
+        const timerElement = document.getElementById('timer')
+        const countdown = setInterval(() => {
+            timeLeft = timeLeft - 1
+            timerElement.innerHTML = timeLeft
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.innerText = ""
+            }
+        }, 1000)
+        countdown()
+
+    </script>
+</body>
+
+</html>

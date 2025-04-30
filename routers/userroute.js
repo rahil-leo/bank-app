@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { getsignup, signup, application, fillapplication, logout, pending, home, sendmoney, getupi, createupi, postSendMoney  } = require('../controllers/user')
+const { getsignup, signup, application, fillapplication, logout, pending, home, sendmoney, getupi, createupi, postSendMoney, getpeoples, getinsufficient  } = require('../controllers/user')
 const { validatethisUser } =require('../middleware/check')
 
 router
@@ -19,13 +19,19 @@ router
     .route('/pending')
     .get(validatethisUser,pending)
 router
-    .route('/sendmoney')
+    .route('/sendmoney/:id')
     .get(validatethisUser, sendmoney)
     .post(validatethisUser,postSendMoney)
 router
     .route('/upi')
     .get(validatethisUser,getupi)
-    .post(validatethisUser,createupi)
+    .post(validatethisUser, createupi)
+router
+    .route('/peoples')
+    .get(validatethisUser, getpeoples)
+router
+    .route('/insufficient')
+    .get(getinsufficient)
 router
     .route('/logout')
     .get(validatethisUser, logout)  

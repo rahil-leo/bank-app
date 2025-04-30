@@ -6,7 +6,8 @@ const transactionschema = new mongoose.Schema({
     senderUpi: String,
     recieverAccount: String,
     recieverUpi: String,
-    amount:String
+    amount: String,
+    day:String
 })
 
 module.exports = mongoose.model('Transaction', transactionschema)

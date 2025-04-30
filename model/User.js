@@ -52,6 +52,10 @@ const userschema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    pin: {
+        type: String,
+        default:""
+    },
     formsubmit: {
         type: Boolean,
         default: false,
@@ -66,7 +70,7 @@ const userschema = new mongoose.Schema({
     },
     balance: {
         type: String,
-        default:""
+        default:0
     },
      upi: {
         type: String,

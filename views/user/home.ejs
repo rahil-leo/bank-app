@@ -32,7 +32,7 @@
         }
 
         .sidebar {
-             background-color: #144da8;
+            background-color: #144da8;
             height: 100%;
             /* padding: 5%; */
             /* padding: 10%; */
@@ -51,7 +51,7 @@
             /* display: flex;
             align-items: center;
             justify-content: center; */
-            height: 100%;
+            height: 100vh;
             overflow-y: scroll;
             scrollbar-width: none;
             padding: 5%;
@@ -79,18 +79,46 @@
             background: rgb(18, 18, 18);
             font-weight: bold;
         }
-        .w-20{
+
+        .w-20 {
             width: 25%;
         }
-        .w-5{
+
+        .w-5 {
             width: 5%;
         }
-        .head{
-            background-color: green;
-            color: white;
-            font-weight: bold;
+
+        .img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
         }
-       
+
+        ul.list-group {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        ul.list-group .list-group-item {
+            background-color: #ffffff;
+            border: none;
+            padding: 12px 15px;
+            color: #495057;
+            font-weight: normal;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ul.list-group .list-group-item:hover {
+            background-color: #e9ecef;
+            color: #007bff;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+        }
     </style>
 
 
@@ -104,25 +132,26 @@
                 <div class="col-12 col-md-4 col-lg-3 p-0">
                     <div class="sidebar">
                         <div class="adjust">
-                            <h4 class="text-center pt-3" style="color: white;">welcome, <%=userdetails.username%>
+                            <h4 class="text-center pt-3" style="color: white;"><img class="img" src="<%=userdetails.photo%>" alt="">
+                                welcome,<%=userdetails.username%>
                             </h4>
                         </div>
                         <a class="sidebar-item" href="">my details</a>
-                        <a class="sidebar-item" href="/sendmoney">sendmoney</a>
+                        <a class="sidebar-item" href="/peoples">peoples</a>
                         <a class="sidebar-item" href="/upi">upi</a>
                         <a class="sidebar-item " style="color: red;" href="/logout">log out</a>
                     </div>
                 </div>
                 <div class="col-12 col-md-8 col-lg-9 p-0">
-                    <div class="form-section">
+                    <div class="form-section" style="border: 3px solid red;">
                         <ul class="list-group list-group-horizontal">
                             <li class="list-group-item w-20 py-3 text-center head">user</li>
                             <li class="list-group-item w-75 py-3 text-center head">
-                               details
+                                details
                             </li>
                         </ul>
                         <ul class="list-group list-group-horizontal">
-                            <li class="list-group-item  w-20">firs tname</li>
+                            <li class="list-group-item  w-20">first name</li>
                             <li class="list-group-item  w-75">
                                 <%=userdetails.firstname%>
                             </li>
@@ -187,7 +216,23 @@
                                 <%=userdetails.accountnumber%>
                             </li>
                         </ul>
-                       
+                        <ul class="list-group list-group-horizontal w-100">
+                            <li class="list-group-item  w-20">upi</li>
+                            <li class="list-group-item  w-75">
+                                <%=userdetails.upi%>
+                            </li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal w-100">
+                            <li class="list-group-item  w-20">balance</li>
+                            <li class="list-group-item  w-75">
+                                <%=userdetails.balance%>
+                            </li>
+                        </ul>
+
+
+                        <div class="text-center">
+                            <img src="<%=a%>" alt="" style="width: 200px;aspect-ratio: 1; border: 3px solid black;">
+                        </div>
                     </div>
                 </div>
 
