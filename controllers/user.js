@@ -108,7 +108,9 @@ exports.home = async (req, res) => {
     if (!userdetails.formsubmit) {
         return res.redirect('/application')
     }
-    QRcode.toDataURL(`http://localhost:3100/sendmoney/${userdetails.id}`, function (err, image) {
+    const url = req.protocol + '://' + req.get('host') + '/sendmoney' + userdetails.id
+    
+    QRcode.toDataURL(url, function (err, image) {
         if (err) {
             return res.send('error')
         }
