@@ -290,7 +290,7 @@
         <button id="close-btn">close</button>
 
         <video id="video" autoplay></video>
-        <button onclick="flipCamera()">Flip Camera</button>
+        <button id="flip-btn">Flip Camera</button>
 
     </div>
 
@@ -303,6 +303,7 @@
         var canvas = document.querySelector('#canvas');
         var ctx = canvas.getContext('2d');
         var currectStream = null;
+         var useFrontCamera = false;
 
         async function opencamara() {
             try {
@@ -310,13 +311,12 @@
                     if (currectStream) {
                         currectStream.getTracks().forEach(track => track.stop());
                     }
-
-                    const constraints = {
+                      const constraints = {
                         video: {
                             facingMode: useFrontCamera ? "user" : "environment"
                         }
                     };
-
+                    
                     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                     currectStream = stream;
                     document.getElementById('camera-video-container').style.display = 'flex';
@@ -331,11 +331,6 @@
                 alert('could not access the camara');
             }
         }
-
-         function flipCamera() {
-                useFrontCamera = !useFrontCamera;
-                opencamara();
-            }
 
         function scanQRCode() {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
