@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>people</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="/style.css" />
 
@@ -157,7 +157,8 @@
             width: 50%;
             aspect-ratio: 16 / 9;
         }
-        .bottom-nav{
+
+        .bottom-nav {
             width: 100%;
             height: 80px;
             background-color: #1e272e;
@@ -165,21 +166,24 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            
+
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 0;
             }
-            .sidebar{
+
+            .sidebar {
                 display: none;
             }
-              .bottom-nav{
+
+            .bottom-nav {
                 display: flex;
                 align-items: center;
                 justify-content: space-evenly;
             }
+
             /* .form-section{
                 margin-bottom: 80px;
             } */
@@ -187,17 +191,26 @@
                 width: 150px;
                 padding: 8px 16px;
             }
-            .icons{
+
+            .icons {
                 background-color: #1e272e;
                 padding: 10px;
                 color: #e0e0e0;
             }
-            .icons:hover{
+
+            .icons:hover {
                 background-color: #1f8ee3;
                 transition: 0.2s linear;
             }
-             .scan-btn{
+
+            .scan-btn {
                 display: none;
+            }
+
+            .close-btn {
+                position: absolute;
+                top: 20px;
+                left: 20px;
             }
         }
     </style>
@@ -236,17 +249,21 @@
                                                 <div class="people text-center">
                                                     <br />
                                                     <span><img src="<%= i.photo %>" alt="" /></span><br />
-                                                    <p><%= i.firstname %>
-                                                            <%= i.lastname %>%></p>
-                                                
+                                                    <p>
+                                                        <%= i.firstname %>
+                                                            <%= i.lastname %>%>
+                                                    </p>
+
                                                 </div>
                                             </a>
                                         </div>
                                         <% }) %>
                                 </div>
+
                                 <div style="height: 80px; background-color: transparent;">
-                                
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -261,18 +278,20 @@
                             <a href="#"><button onclick="opencamara()"><i class="bi bi-upc-scan icons"></i></button></a>
                             <a href="/upi"><i class="bi bi-file-plus-fill icons"></i></a>
                             <a href="/logout"><i class="bi bi-box-arrow-right icons"></i></a>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-   
-    
+
 
     <div class="camera-video-container" id="camera-video-container">
+        <button id="close-btn">close</button>
+
         <video id="video" autoplay></video>
+        <button onclick="flipCamera()">Flip Camera</button>
+
     </div>
 
     <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
@@ -288,6 +307,16 @@
         async function opencamara() {
             try {
                 if (navigator.mediaDevices.getUserMedia) {
+                    if (currectStream) {
+                        currectStream.getTracks().forEach(track => track.stop());
+                    }
+
+                    const constraints = {
+                        video: {
+                            facingMode: useFrontCamera ? "user" : "environment"
+                        }
+                    };
+
                     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                     currectStream = stream;
                     document.getElementById('camera-video-container').style.display = 'flex';
@@ -303,6 +332,11 @@
             }
         }
 
+         function flipCamera() {
+                useFrontCamera = !useFrontCamera;
+                opencamara();
+            }
+
         function scanQRCode() {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -314,6 +348,14 @@
             }
             requestAnimationFrame(scanQRCode);
         }
+
+        document.getElementById('close-btn').addEventListener('click', function () {
+            document.getElementById('camera-video-container').style.display = 'none'
+            if (currectStream) {
+                currectStream.getTracks().forEach(track => track.stop())
+            }
+            video.pause()
+        })
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
