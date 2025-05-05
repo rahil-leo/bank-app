@@ -48,7 +48,7 @@
         }
 
         .form-section {
-             background-color: #ecf3f9;
+             background-color: aliceblue;
             /* display: flex;
             align-items: center;
             justify-content: center; */
@@ -104,7 +104,9 @@
             left: 0; 
             
         }
-
+        .transition-div{
+            background-color: white;
+        }
         @media (max-width: 768px) {
             body {
                 padding: 0;
@@ -148,9 +150,11 @@
                 font-size: 14px;
             }
         }
-        @media (max-width: 500px){
-            .h-100vhn{
-                margin-bottom: 80px
+        @media (max-width: 450px){
+            .transition-div{
+                padding-bottom: 50px;
+                margin-bottom: 50px;
+                /* background-color: aqua; */
             }
         }
     </style>
@@ -170,14 +174,14 @@
                             </h4>
                         </div>
                         <a class="sidebar-item" href="/">Home</a>
-                        <a class="sidebar-item" href="/peoples">people</a>
+                        <a class="sidebar-item" href="/people">people</a>
                         <a class="sidebar-item" href="/upi">upi</a>
                         <a class="sidebar-item " style="color: red;" href="/logout">log out</a>
                     </div>
                 </div>
                 <div class="col-12 col-md-8 col-lg-9 p-0">
                     <div class="form-section">
-                        <form action="/sendmoney/<%= id%>" method="POST" class="p-3 bg-white shadow rounded">
+                        <form action="/sendmoney/<%= id%>" method="POST" class="p-3   shadow rounded transition-div">
                             <div class="transactions">
                                 <% transactions.forEach(i=> { %>
                                     <% if (i.senderUpi==userdetails.upi) { %>
@@ -223,7 +227,7 @@
                     <div class="col-12">
                         <div class="bottom-nav">
                             <a href="/"><i class="bi bi-house icons"></i></a>
-                            <a href="/peoples"><i class="bi bi-send icons"></i></a>
+                            <a href="/people"><i class="bi bi-send icons"></i></a>
                             <a href="/upi"><i class="bi bi-file-plus-fill icons"></i></a>
                             <a href="/logout"><i class="bi bi-box-arrow-right icons"></i></a>
 

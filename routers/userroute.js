@@ -27,7 +27,7 @@ router
     .get(validatethisUser,getupi)
     .post(validatethisUser, createupi)
 router
-    .route('/peoples')
+    .route('/people')
     .get(validatethisUser, getpeoples)
 router
     .route('/insufficient')
