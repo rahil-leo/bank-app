@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const cookieparser = require('cookie-parser')
 const fileupload = require('express-fileupload')
-
+const clearcache = require('./utils/clear')
 
 app.use(express.urlencoded({ extended: true }))
 app.set('view engine', 'ejs')
@@ -14,6 +14,7 @@ app.use(fileupload({
     useTempFiles: true,
     tempFileDir: '/tmp/'
 }))
+app.use(clearcache)
 
 const userroute = require('./routers/userroute')
 const loginroute = require('./routers/loginroute')

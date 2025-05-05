@@ -102,6 +102,8 @@ exports.pending = (req, res) => {
 exports.home = async (req, res) => {
     const username = req.user.username
     let userdetails = await User.findOne({ username: username })
+    // console.log(userdetails)
+
     if (userdetails.formsubmit && !userdetails.approved) {
         return res.redirect('/pending')
     }
@@ -110,6 +112,9 @@ exports.home = async (req, res) => {
     }
     const url = req.protocol + '://' + req.get('host') + '/sendmoney/' + userdetails.id
     // console.log(url)
+    if (!userdetails.upi) {
+        return res.render('user/homewithoutqr',{userdetails})
+    }
     
     QRcode.toDataURL(url, function (err, image) {
         if (err) {
@@ -236,7 +241,8 @@ exports.postSendMoney = async (req, res) => {
 exports.getpeoples = async (req, res) => {
     try {
         const currentUsername = req.user.username;
-        const users = await User.find({ username: { $ne: currentUsername }})
+        const users = await User.find({ username: { $ne: currentUsername }, upi: { $ne: "" } })
+        // console.log(users,'here is the users')
         // console.log(users)
         res.render('user/people', { users, currentUsername });
     } catch (err) {
