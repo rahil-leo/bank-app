@@ -190,7 +190,7 @@ exports.postSendMoney = async (req, res) => {
             return res.send(`<div style='display: flex;justify-content: center;align-items: center;height: 100vh;width: 100%; '>
                                 <div>
                                     <h1>this account do not have a upi to send money</h1>
-                                    <a href="/peoples"><button style ='padding:8px 15px;background-color:red;color:white;'>bank</button></a>
+                                    <a href="/people"><button style ='padding:8px 15px;background-color:red;color:white;'>bank</button></a>
                                 </div>
                           </div>`)
         }
