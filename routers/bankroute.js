@@ -2,12 +2,16 @@ const express = require('express')
 const router = express.Router()
 
 const { getbank, getbankdetails, getselectaccount, approval, getapproved, getdeposite, depositemoney, getwidrow, widrowmoney, decline, showAllDeclinedAccounts } = require('../controllers/bank')
-
-const { validatethisUser } = require('../middleware/check')
+const{getbanklogin, banklogin}= require('../controllers/bankauth')
+const {isLoggedin}=require('../middleware/admincheck')
 
 router
     .route('/')
     .get(getbankdetails)
+router
+    .route('/banklogin')
+    .get(isLoggedin,getbanklogin)    
+    .post(isLoggedin,banklogin)
 router
     .route('/bank/:id')
     .get(getbank)
@@ -20,7 +24,6 @@ router
 router
     .route('/approved')
     .get(getapproved)
-
 router
     .route('/deposite')
     .get(getdeposite)

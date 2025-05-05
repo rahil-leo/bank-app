@@ -7,13 +7,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/style.css">
     <style>
         * {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
-            transition: 0.15s ease-in-out;
+            transition: .15s ease-in-out;
         }
 
         .adjust {
@@ -28,15 +29,18 @@
 
         .h-100vh {
             height: 100vh;
+            /* margin: 0; */
         }
 
         .sidebar {
-            background-color: #2c3e50;
-            /* updated dark indigo */
+             background-color: #1e272e;
             height: 100%;
+            /* padding: 5%; */
+            /* padding: 10%; */
             overflow-y: scroll;
             scrollbar-width: none;
         }
+
 
         .sidebar button {
             width: 100%;
@@ -44,8 +48,10 @@
         }
 
         .form-section {
-            background-color: #ecf0f3;
-            /* updated light gray-blue */
+             background-color: #f5f7fa;
+            /* display: flex;
+            align-items: center;
+            justify-content: center; */
             height: 100vh;
             overflow-y: scroll;
             scrollbar-width: none;
@@ -71,8 +77,7 @@
 
         .sidebar-item:hover {
             color: white;
-            background: #34495e;
-            /* updated hover color */
+             background: #485460;
             font-weight: bold;
         }
 
@@ -92,7 +97,7 @@
 
         ul.list-group {
             background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
+            border: 1px solid #e0e0e0;
             margin-bottom: 10px;
             border-radius: 5px;
         }
@@ -101,7 +106,7 @@
             background-color: #ffffff;
             border: none;
             padding: 12px 15px;
-            color: #343a40;
+            color: #495057;
             font-weight: normal;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -110,13 +115,46 @@
             background-color: #e9ecef;
             color: #007bff;
         }
-
+        .bottom-nav{
+            width: 100%;
+            height: 80px;
+            background-color: #1e272e;
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            
+        }
         @media (max-width: 768px) {
             body {
                 padding: 0;
             }
+            .sidebar{
+                display: none;
+            }
+            .h-100vh {
+            margin-bottom: 80px;
+           }
+            .bottom-nav{
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+            .icons{
+                background-color: #1e272e;
+                padding: 10px;
+                color: #e0e0e0;
+            }
+            .icons:hover{
+                background-color: #1f8ee3;
+                transition: 0.2s linear;
+            }
+
         }
+        
     </style>
+
+
 </head>
 
 <body>
@@ -127,19 +165,18 @@
                 <div class="col-12 col-md-4 col-lg-3 p-0">
                     <div class="sidebar">
                         <div class="adjust">
-                            <h4 class="text-center pt-3" style="color: white;"><img class="img"
-                                    src="<%=userdetails.photo%>" alt="">
+                            <h4 class="text-center pt-3" style="color: white;"><img class="img" src="<%=userdetails.photo%>" alt="">
                                 welcome,<%=userdetails.username%>
                             </h4>
                         </div>
-                        <a class="sidebar-item" href="">my details</a>
+                        <a class="sidebar-item" href="">Home</a>
                         <a class="sidebar-item" href="/peoples">peoples</a>
                         <a class="sidebar-item" href="/upi">upi</a>
                         <a class="sidebar-item " style="color: red;" href="/logout">log out</a>
                     </div>
                 </div>
                 <div class="col-12 col-md-8 col-lg-9 p-0">
-                    <div class="form-section">
+                    <div class="form-section" >
                         <ul class="list-group list-group-horizontal">
                             <li class="list-group-item w-20 py-3 text-center head">user</li>
                             <li class="list-group-item w-75 py-3 text-center head">
@@ -225,15 +262,31 @@
                             </li>
                         </ul>
 
+
                         <div class="text-center">
-                            <img src="<%=a%>" alt="" style="width: 200px; aspect-ratio: 1; border: 3px solid black;">
+                            <img src="<%=a%>" alt="" style="width: 200px;aspect-ratio: 1; border: 3px solid black;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bottom-nav">
+                            <a href="/"><i class="bi bi-house icons"></i></a>
+                            <a href="/peoples"><i class="bi bi-send icons"></i></a>
+                            <a href="/upi"><i class="bi bi-file-plus-fill icons"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+       
     </section>
 
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

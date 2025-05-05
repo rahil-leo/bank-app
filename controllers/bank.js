@@ -66,6 +66,7 @@ exports.depositemoney = async(req, res) => {
         }
         user.balance = parseInt(user.balance) + parseInt(amount)
         await user.save()
+        alert("username", user.username,'deposit success full')
         return res.redirect('/bank')
     } catch (err) {
         console.log(err)

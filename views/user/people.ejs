@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>peoples</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="/style.css" />
 
     <style>
@@ -14,6 +16,7 @@
             margin: 0;
             box-sizing: border-box;
             transition: 0.15s ease-in-out;
+            text-decoration: none;
         }
 
         .adjust {
@@ -71,8 +74,8 @@
         }
 
         img {
-            height: 40px;
-            width: 40px;
+            height: 60px;
+            width: 60px;
             border-radius: 50%;
         }
 
@@ -154,15 +157,44 @@
             width: 50%;
             aspect-ratio: 16 / 9;
         }
+        .bottom-nav{
+            width: 100%;
+            height: 80px;
+            background-color: #1e272e;
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            
+        }
 
         @media (max-width: 768px) {
             body {
                 padding: 0;
             }
-
+            .sidebar{
+                display: none;
+            }
+              .bottom-nav{
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+            .form-section{
+                margin-bottom: 80px;
+            }
             .scan-btn {
                 width: 150px;
                 padding: 8px 16px;
+            }
+            .icons{
+                background-color: #1e272e;
+                padding: 10px;
+                color: #e0e0e0;
+            }
+            .icons:hover{
+                background-color: #1f8ee3;
+                transition: 0.2s linear;
             }
         }
     </style>
@@ -178,7 +210,7 @@
                             <h4 class="text-center pt-3" style="color: white;">Welcome, <%= currentUsername %>
                             </h4>
                         </div>
-                        <a class="sidebar-item" href="/">my details</a>
+                        <a class="sidebar-item" href="/">Home</a>
                         <a class="sidebar-item" href="/peoples">peoples</a>
                         <a class="sidebar-item" href="/upi">upi</a>
                         <a class="sidebar-item" style="color: red;" href="/logout">log out</a>
@@ -197,19 +229,30 @@
                                 <div class="row">
                                     <% users.forEach(i=> { %>
                                         <div class="col-12 col-md-6 col-lg-4">
-                                            <div class="people text-center">
-                                                <%= i.firstname %>
-                                                    <%= i.lastname %><br />
-                                                        <span><img src="<%= i.photo %>" alt="" /></span><br />
-                                                        <p>UPI: <%= i.upi %>
-                                                        </p>
-                                                        <a class="sendmoney" href="/sendmoney/<%= i.id %>">send
-                                                            money</a>
-                                            </div>
+                                            <a class="sendmoney" href="/sendmoney/<%= i.id %>">
+                                                <div class="people text-center">
+                                                    <br />
+                                                    <span><img src="<%= i.photo %>" alt="" /></span><br />
+                                                    <p><%= i.firstname %>
+                                                            <%= i.lastname %>%></p>
+                                                
+                                                </div>
+                                            </a>
                                         </div>
                                         <% }) %>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bottom-nav">
+                            <a href="/"><i class="bi bi-house icons"></i></a>
+                            <a href="/peoples"><i class="bi bi-send icons"></i></a>
+                            <a href="/upi"><i class="bi bi-file-plus-fill icons"></i></a>
                         </div>
                     </div>
                 </div>

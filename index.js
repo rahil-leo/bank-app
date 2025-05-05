@@ -17,7 +17,8 @@ app.use(fileupload({
 
 const userroute = require('./routers/userroute')
 const loginroute = require('./routers/loginroute')
-let bankroute = require('./routers/bankroute')
+const bankroute = require('./routers/bankroute')
+
 app.use('/', userroute)
 app.use('/login', loginroute)
 app.use('/bank',bankroute)

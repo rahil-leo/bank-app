@@ -109,7 +109,7 @@ exports.home = async (req, res) => {
         return res.redirect('/application')
     }
     const url = req.protocol + '://' + req.get('host') + '/sendmoney/' + userdetails.id
-    console.log(url)
+    // console.log(url)
     
     QRcode.toDataURL(url, function (err, image) {
         if (err) {
@@ -187,7 +187,12 @@ exports.postSendMoney = async (req, res) => {
         // console.log(reciever,'here is the reciever')
         // console.log(reciever.upi, 'here is the upi')
         if (!reciever.upi) {
-            return res.send('this account dont have a upi')
+            return res.send(`<div style='display: flex;justify-content: center;align-items: center;height: 100vh;width: 100%; '>
+                                <div>
+                                    <h1>this account do not have a upi to send money</h1>
+                                    <a href="/peoples"><button style ='padding:8px 15px;background-color:red;color:white;'>bank</button></a>
+                                </div>
+                          </div>`)
         }
         if (!reciever) {
             return res.send('incorrect')
