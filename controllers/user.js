@@ -187,10 +187,15 @@ exports.postSendMoney = async (req, res) => {
     try {
         const { amount } = req.body
         const reciverparams = req.params.id
+        const { pin } = req.body
+        // console.log(pin)
         // console.log(reciverparams, 'here is the param id')
         const reciever = await User.findOne({ id: reciverparams })
         // console.log(reciever,'here is the reciever')
         // console.log(reciever.upi, 'here is the upi')
+        if (!reciever) {
+            return res.send('incorrect')
+        }
         if (!reciever.upi) {
             return res.send(`<div style='display: flex;justify-content: center;align-items: center;height: 100vh;width: 100%; '>
                                 <div>
@@ -199,20 +204,26 @@ exports.postSendMoney = async (req, res) => {
                                 </div>
                           </div>`)
         }
-        if (!reciever) {
-            return res.send('incorrect')
-        }
         let username = req.user.username
         const sender = await User.findOne({ username: username })
         // console.log(sender, 'here is the sender')
-        if (parseInt(sender.balance) < parseInt(amount)) {
-            return res.redirect('/insufficient')
+       
+        
+        if (pin == sender.pin) {
+            if (parseInt(sender.balance) < parseInt(amount)) {
+                return res.redirect('/insufficient')
+            }
+
+            sender.balance = parseInt(sender.balance) - parseInt(amount)
+            await sender.save()
+            reciever.balance = parseInt(reciever.balance) + parseInt(amount)
+            // console.log(reciever.balance,'here is reciver balance')
+            await reciever.save()
+           
+            
+        } else {
+            return res.send('incorrect pin')
         }
-        sender.balance = parseInt(sender.balance) - parseInt(amount)
-        await sender.save()
-        reciever.balance = parseInt(reciever.balance) + parseInt(amount)
-        console.log(reciever.balance)
-        await reciever.save()
         await Transaction.create({
             id: Date.now(),
             senderAccount: sender.accountnumber,
@@ -230,8 +241,9 @@ exports.postSendMoney = async (req, res) => {
                 { senderUpi: reciever.upi, recieverUpi: sender.upi }
             ]
         })
+        return res.render("user/sendmoney", { userdetails, id: reciverparams, transactions })
+
         // console.log(transactions, 'here is the transctions')
-        return res.render("user/sendmoney",{userdetails,id:reciverparams,transactions})
     } catch (e) {
         console.log(e)
         return res.send('error')
