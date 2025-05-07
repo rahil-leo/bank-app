@@ -213,7 +213,6 @@ exports.postSendMoney = async (req, res) => {
             if (parseInt(sender.balance) < parseInt(amount)) {
                 return res.redirect('/insufficient')
             }
-
             sender.balance = parseInt(sender.balance) - parseInt(amount)
             await sender.save()
             reciever.balance = parseInt(reciever.balance) + parseInt(amount)
@@ -222,7 +221,12 @@ exports.postSendMoney = async (req, res) => {
            
             
         } else {
-            return res.send('incorrect pin')
+            return res.send(`<div style='display: flex;justify-content: center;align-items: center;height: 100vh;width: 100%; '>
+                                <div>
+                                    <h1>incorrect pin</h1>
+                                    <a href="/people"><button style ='padding:8px 15px; background-color:black;color:white;'>back</button></a>
+                                </div>
+                          </div>`)
         }
         await Transaction.create({
             id: Date.now(),
@@ -241,7 +245,7 @@ exports.postSendMoney = async (req, res) => {
                 { senderUpi: reciever.upi, recieverUpi: sender.upi }
             ]
         })
-        return res.render("user/sendmoney", { userdetails, id: reciverparams, transactions })
+        return res.render("user/sendmoney", { userdetails, id: reciverparams, transactions,reciever})
 
         // console.log(transactions, 'here is the transctions')
     } catch (e) {

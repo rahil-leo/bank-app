@@ -90,7 +90,7 @@
 
         .time {
             font-size: 12px;
-            color: #333;
+            color: #f7f4f4;
             display: block;
             /* margin-bottom: 4px; */
         }
@@ -120,6 +120,15 @@
             background-color: rgba(0, 0, 0, 0.618);
             overflow: auto;
             display: none;
+        }
+        .img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+        }
+        h5{
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-transform: capitalize;
         }
 
         @media (max-width: 768px) {
@@ -201,6 +210,8 @@
                 <div class="col-12 col-md-8 col-lg-9 p-0">
                     <div class="form-section">
                         <form action="/sendmoney/<%= id%>" method="POST" class="p-3   shadow rounded transition-div">
+                        <h5 class="text-center"><span><img class="img" src="<%=reciever.photo%>" alt=""></span> &nbsp; <%=reciever.username%></h5>
+
                             <div class="transactions">
                                 <% transactions.forEach(i=> { %>
                                     <% if (i.senderUpi==userdetails.upi) { %>
@@ -235,13 +246,13 @@
                                 <input type="number" name="amount" id="amount" class="form-control"
                                     placeholder="Amount to send" required min="1">
                             </div>
-                            <button type="button" id="paybtn" class="btn btn-success">pay</button>
+                            <button type="button" id="paybtn" class="btn btn-success">send</button>
 
                             <div class="pin-div" id="pin-div">
                                 <div>
                                     <form action="/sendmoney" method="post">
                                         <input type="text" name="pin" placeholder="pin">
-                                        <button type="submit">submit</button>
+                                        <button type="submit">pay</button>
                                     </form>
                                 </div>
                             </div>
